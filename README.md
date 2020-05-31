@@ -1,2 +1,11 @@
-# TestAgibankJava
-Repositório para os fontes utilizados no teste do agibank para desenvolvimento em java
+# Prova Desenvolvedor Agibank
+Fontes da solução proposta para a prova de desenvolvedor da empresa Agibank
+
+# Desafio
+Criar um sistema de análise de dados de venda que irá importar lotes de arquivos e 
+produzir um relatório baseado em informações presentes no mesmo.
+
+# Conclusão
+Com base em regras específicas foi feita a abordagem na linguagem Java utilizando-se de uma 
+biblioteca chamada WatchService para monitorar os eventos uma pasta interna e escanear os arquivos
+analisando os dados e no final gerando em um arquivo o relatório com base nos mesmos.
