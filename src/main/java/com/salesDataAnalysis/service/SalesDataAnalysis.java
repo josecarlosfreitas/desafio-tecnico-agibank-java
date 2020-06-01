@@ -9,9 +9,9 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
-import com.salesDataAnalysis.builder.ReportDataFileBuilder;
 import com.salesDataAnalysis.config.FileConfig;
 import com.salesDataAnalysis.dto.ReportDataDTO;
+import com.salesDataAnalysis.factory.ReportDataFileFactory;
 import com.salesDataAnalysis.util.FileUtil;
 
 /**
@@ -24,15 +24,11 @@ import com.salesDataAnalysis.util.FileUtil;
 @Component
 public class SalesDataAnalysis {
 	
-	public void generateSaleReport(Path filePath) {
+	public void generateSaleReport(Path filePath) throws IOException {
 		
-		try {
-			ReportDataDTO reportDataDTO = new ReportDataFileBuilder(filePath).BuildDTO();
-			
-			createAndWriteToOutputFileReport(filePath, reportDataDTO);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ReportDataDTO reportDataDTO = new ReportDataFileFactory(filePath).BuildDTO();
+		
+		createAndWriteToOutputFileReport(filePath, reportDataDTO);
 	}
 	
 	

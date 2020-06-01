@@ -1,4 +1,4 @@
-package com.salesDataAnalysis.builder;
+package com.salesDataAnalysis.factory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,19 +20,19 @@ import com.salesDataAnalysis.util.FileUtil;
  * @author <a href="mailto:jose.freitas@ntconsult.com.br">jose.freitas</a>
  * @since 30/05/2020 09:29:00
  */
-public class ReportDataFileBuilder implements IReportDataFileBuilder {
+public class ReportDataFileFactory implements IReportDataFileFactory {
 
 	Path _filePath;
 	ReportDataDTO _reportDataDTO;
 	private final String FILE_SPLIT_LINE = "ç";
 	
-	public ReportDataFileBuilder(Path _filePath) {
+	public ReportDataFileFactory(Path _filePath) {
 		super();
 		this._filePath = _filePath;
 		this._reportDataDTO = new ReportDataDTO();
 	}
 
-	public ReportDataDTO BuildDTO() throws IOException {
+	public ReportDataDTO BuildDTO() {
 
         List<String> fileLines = FileUtil.TransformFilePathInListOfStringLine(_filePath);
 
