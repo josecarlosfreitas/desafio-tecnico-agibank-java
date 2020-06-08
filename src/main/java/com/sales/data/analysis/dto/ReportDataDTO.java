@@ -1,6 +1,7 @@
 package com.sales.data.analysis.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,6 +26,9 @@ public class ReportDataDTO {
     private List<Sale> sales;
     
     public ReportDataDTO() {
+    	clients = new ArrayList<Client>();
+    	salesmen = new ArrayList<Salesman>();
+    	sales = new ArrayList<Sale>();
     }
 
     public List<Client> getClients() {

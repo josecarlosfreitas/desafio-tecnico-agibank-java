@@ -2,17 +2,13 @@ package com.sales.data.analysis.factory;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.util.StringUtils;
+import java.util.Scanner;
 
 import com.sales.data.analysis.Enum.AnalysisDataTypeEnum;
 import com.sales.data.analysis.domain.Client;
 import com.sales.data.analysis.domain.Sale;
 import com.sales.data.analysis.domain.Salesman;
 import com.sales.data.analysis.dto.ReportDataDTO;
-import com.sales.data.analysis.util.FileUtil;
 
 /**
  * Classe que faz a montagem da DTO para a análise dos dados
@@ -34,40 +30,33 @@ public class ReportDataFileFactory implements IReportDataFileFactory {
 
 	public ReportDataDTO BuildDTO() {
 
-        List<String> fileLines = FileUtil.TransformFilePathInListOfStringLine(_filePath);
-
         ReportDataDTO reportDataDTO = new ReportDataDTO();
-        reportDataDTO.setClients(transformFileLinesInClients(fileLines));
-        reportDataDTO.setSalesmen(transformFileLinesInSalesmen(fileLines));
-        reportDataDTO.setSales(transformFileLinesInSales(fileLines));
+        
+        try (Scanner sc = new Scanner(_filePath, "UTF-8")) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                
+                String splitLine = line.split(FILE_SPLIT_LINE)[0];
+                
+                if (AnalysisDataTypeEnum.CLIENT.getCode().equals(splitLine)) {
+					reportDataDTO.getClients().add(new Client(line.split(FILE_SPLIT_LINE)));
+                }else
+                
+            	if (AnalysisDataTypeEnum.SALESMAN.getCode().equals(splitLine)) {
+					reportDataDTO.getSalesmen().add(new Salesman(line.split(FILE_SPLIT_LINE)));
+            	}else
+            		
+            	if (AnalysisDataTypeEnum.SALE.getCode().equals(splitLine)) {
+					reportDataDTO.getSales().add(new Sale(line.split(FILE_SPLIT_LINE)));
+				}
+                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         return reportDataDTO;
     }
 	
-	private List<Client> transformFileLinesInClients(List<String> fileLines){
-        return fileLines
-                .stream()
-                .filter(line -> !StringUtils.isEmpty(line)
-                        && AnalysisDataTypeEnum.CLIENT.getCode().equals(line.split(FILE_SPLIT_LINE)[0]))
-                .map(line -> new Client(line.split(FILE_SPLIT_LINE)))
-                .collect(Collectors.toList());
-    }
-
-    private List<Salesman> transformFileLinesInSalesmen(List<String> fileLine){
-        return fileLine
-                .stream()
-                .filter(line -> !StringUtils.isEmpty(line)
-                        && AnalysisDataTypeEnum.SALESMAN.getCode().equals(line.split(FILE_SPLIT_LINE)[0]))
-                .map(line -> new Salesman(line.split(FILE_SPLIT_LINE)))
-                .collect(Collectors.toList());
-    }
-
-    private List<Sale> transformFileLinesInSales(List<String> fileLine){
-        return fileLine
-                .stream()
-                .filter(line -> !StringUtils.isEmpty(line)
-                        && AnalysisDataTypeEnum.SALE.getCode().equals(line.split(FILE_SPLIT_LINE)[0]))
-                .map(line -> new Sale(line.split(FILE_SPLIT_LINE)))
-                .collect(Collectors.toList());
-    }
 }
